@@ -18,13 +18,17 @@ Mario moves randomly across each level's NxN toroidal grid, interacting with ele
 - Detailed game log output tracking Mario's every move and status.
 
 ## Files
--Level.cpp
--Level.h
--Mario.h
--Mario.cpp
--World.h         
--World.cpp
--Main.cpp
+1. Level.cpp
+2. Level.h
+3. Main.cpp
+4. Mario.h
+5. Mario.cpp
+6. World.h
+7. World.cpp
+8. input.txt
+9. output.txt
+10. program
+11. README.md
 
 ## Known Error 
 - There are no known errors in this program.
