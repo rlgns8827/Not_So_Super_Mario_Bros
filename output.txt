@@ -1,0 +1,53 @@
+==========
+Mario is starting in position: (2,1)
+==========
+c b x m c 
+k c w g k 
+c H g m g 
+c k m m k 
+g k m g x 
+==========
+Level: 0. Mario is at position: (2,0). Mario is at power level 0. Mario collected a coin. Mario has 2 lives left. Mario has 1 coins. Mario will move LEFT.
+c b x m c 
+k c w g k 
+H x g m g 
+c k m m k 
+g k m g x 
+==========
+Level: 0. Mario is at position: (2,1). Mario is at power level 0. Mario visited an empty space. Mario has 2 lives left. Mario has 1 coins. Mario will move RIGHT.
+c b x m c 
+k c w g k 
+x H g m g 
+c k m m k 
+g k m g x 
+==========
+Level: 0. Mario is at position: (3,1). Mario is at power level 0. Mario encountered a Koopa and lost. Mario has 1 lives left. Mario has 1 coins. Mario will move DOWN.
+c b x m c 
+k c w g k 
+x x g m g 
+c H m m k 
+g k m g x 
+==========
+Level: 0. Mario is at position: (2,1). Mario is at power level 0. Mario visited an empty space. Mario has 1 lives left. Mario has 1 coins. Mario will move UP.
+c b x m c 
+k c w g k 
+x H g m g 
+c x m m k 
+g k m g x 
+==========
+Level: 0. Mario is at position: (2,0). Mario is at power level 0. Mario visited an empty space. Mario has 1 lives left. Mario has 1 coins. Mario will move LEFT.
+c b x m c 
+k c w g k 
+H x g m g 
+c x m m k 
+g k m g x 
+==========
+Level: 0. Mario is at position: (1,0). Mario is at power level 0. Mario encountered a Koopa and lost. Mario has 0 lives left. Mario has 1 coins. Mario will move UP.
+c b x m c 
+H c w g k 
+x x g m g 
+c x m m k 
+g k m g x 
+==========
+WE LOST THE GAME! :(
+Mario Lost!
