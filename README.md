@@ -5,17 +5,21 @@
 2. Student ID: 2480883
 3. Chapman Email: kiyoo@chapman.edu
 4. Course number and section: CPSC-350-04
-5. Assignment or exercise number: PA2: Not So Super Mario Bros.
+5. Assignment or exercise number: PA2: Not So Super Mario Bros
 
 ## Project Description
 This project is a C++ simulation inspired by the classic Super Mario Bros. game, designed for Data Structures and Algorithms. The objective is to guide Mario through a world of multiple levels filled with coins, mushrooms, enemies (Goombas and Koopas), warp pipes, and level bosses.
 Mario moves randomly across each level's NxN toroidal grid, interacting with elements based on defined rules. He gains coins, levels up with mushrooms, and battles enemies with probabilistic outcomes. The game ends when Mario either defeats the final boss or runs out of lives.
 
 ## Key Features
-- Procedural world generation based on input specifications.
-- Simulation of character interactions using arrays (no STL containers).
-- Command-line interface with input and output file handling.
-- Detailed game log output tracking Mario's every move and status.
+- Mario Simulation: Simulates Mario navigating the grid, interacting with the environment, battling enemies, collecting coins, eating mushrooms, and moving through levels.
+- Randomized World Generation: Builds a multi-level world based on runtime parameters, with randomized placement of coins, enemies, mushrooms, bosses, and warp pipes.
+- Life and Power Management: Tracks Mario’s lives, coins (extra lives earned after collecting 20 coins), and power levels (PL0, PL1, PL2).
+- Battle Logic: Includes probabilistic outcomes for battles against Goombas, Koopas, and Bosses, affecting Mario’s survival and power level.
+- Toroidal Grid Movement: Implements grid wrapping horizontally and vertically to allow continuous movement (torus behavior).
+- Warp Pipes: Allows Mario to instantly advance to the next level if a warp pipe is found.
+- Detailed Logging: Records every move Mario makes into an output text file, including actions taken, Mario’s state, and the updated map.
+- Array-Only Data Structure: Implements the world using a 3D L x N x N array of characters without using any advanced data structures like vector or list.
 
 ## Files
 1. Level.cpp
