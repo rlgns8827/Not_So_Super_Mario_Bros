@@ -1,10 +1,8 @@
 // Kihoon Yoo
 // 2486883
 // kiyoo@chapman.edu 
-// CPSC-350-04
+// CPSC-350-03
 // PA 2: Not So Super Mario Bros
-
-// This file defines the Level class, which models an NxN grid-based level in the Mario simulation.
 
 #include "Level.h"
 #include <iostream>
@@ -29,8 +27,7 @@ Level::~Level() {
     delete[] grid;
 }
 
-// Fills the level with objects based on percentage values
-// Also places exactly one boss, and a warp pipe if hasWarp is true
+// Fill level with objects based on percentages
 void Level::populateLevel(int coinPct, int emptyPct, int goombaPct, int koopaPct, int mushroomPct, bool hasWarp) {
     int totalCells = size * size;
 
