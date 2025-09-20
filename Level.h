@@ -1,7 +1,7 @@
 // Kihoon Yoo
 // 2486883
 // kiyoo@chapman.edu 
-// CPSC-350-04
+// CPSC-350-03
 // PA 2: Not So Super Mario Bros
 
 #ifndef LEVEL_H
@@ -11,32 +11,26 @@
 
 class Level {
 private:
-    int size;       // NxN grid size
-    char** grid;    // 2D grid for storing level items
+    int size;       
+    char** grid;    
 
 public:
     Level(int n);   // Constructor
     ~Level();       // Destructor
 
-    // Populate grid with elements by percentage and add boss/warp
+
     void populateLevel(int coinPct, int emptyPct, int goombaPct, int koopaPct, int mushroomPct, bool hasWarp);
+    void placeObject(char object); // Place one object at random location
 
-    // Place specific object at a random empty location
-    void placeObject(char object);
-
-    // Output current level to logfile
-    void printLevel(std::ofstream& logFile);
-
-    // Access and modify individual positions
-    char getPosition(int row, int col);
-    void setPosition(int row, int col, char object);
-
-    // Return grid size
-    int getSize();
-
-    // Check if boss is still alive in the level
-    bool bossExists() const;
+    void printLevel(std::ofstream& logFile); // Output level state
+    char getPosition(int row, int col); // Get object at position
+    void setPosition(int row, int col, char object); // Set object at position
+    
+    int getSize();  // Return grid size
+    bool bossExists() const;  // Check if boss is still in grid
 };
 
 #endif
+
+
 
