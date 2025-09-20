@@ -1,12 +1,8 @@
 // Kihoon Yoo
 // 2486883
 // kiyoo@chapman.edu 
-// CPSC-350-04
+// CPSC-350-03
 // PA 2: Not So Super Mario Bros
-
-// This file contains the entry point for the simulation.
-// It reads input and output file names from command-line arguments,
-// constructs the game world, and runs through all levels until Mario wins or loses.
 
 #include "World.h"
 #include <iostream>
@@ -20,16 +16,14 @@ int main(int argc, char* argv[]) {
         return 1;
     }
 
-    std::ifstream inputFile(argv[1]);    // Input file: level config
-    std::ofstream logFile(argv[2]);      // Output file: move log
+    std::ifstream inputFile(argv[1]);    
+    std::ofstream logFile(argv[2]);      
 
-    // Check if input file opened successfully
     if (!inputFile.is_open()) {
         std::cerr << "Failed to open input file.\n";
         return 1;
     }
 
-    // Check if output file opened successfully
     if (!logFile.is_open()) {
         std::cerr << "Failed to open output file.\n";
         return 1;
@@ -37,12 +31,12 @@ int main(int argc, char* argv[]) {
 
     srand(static_cast<unsigned>(time(0))); // Seed random number generator
 
-    World world(argv[1]);  // Construct world using input configuration
+    World world(argv[1]);  // Build world from input file
 
-    // Loop through each level while Mario still has lives
+    // Play each level while Mario has lives
     for (int i = 0; i < world.levels && world.mario->lives > 0; ++i) {
-        world.playLevel(i, logFile);     // Play current level
-        if (world.mario->lives <= 0) break; // If Mario dies, stop game
+        world.playLevel(i, logFile);     
+        if (world.mario->lives <= 0) break; 
     }
 
     // Print game result to log file
@@ -55,3 +49,5 @@ int main(int argc, char* argv[]) {
     logFile.close(); // Finalize output
     return 0;
 }
+
+
