@@ -1,7 +1,7 @@
 // Kihoon Yoo
 // 2486883
 // kiyoo@chapman.edu 
-// CPSC-350-04
+// CPSC-350-03
 // PA 2: Not So Super Mario Bros
 
 #ifndef WORLD_H
@@ -32,4 +32,3 @@ public:
 };
 
 #endif  // WORLD_H
-
