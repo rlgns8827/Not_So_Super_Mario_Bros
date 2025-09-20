@@ -1,7 +1,7 @@
 // Kihoon Yoo
 // 2486883
 // kiyoo@chapman.edu 
-// CPSC-350-04
+// CPSC-350-03
 // PA 2: Not So Super Mario Bros
 
 #include "World.h"
@@ -11,6 +11,7 @@
 #include <ctime>
 
 // Constructor: Initializes the world based on input file parameters
+// https://www.tutorialspoint.com/cplusplus-program-to-read-file-word-by-word#:~:text=The%20task%20is%20very%20simple,each%20word%20one%20by%20one
 World::World(std::string inputFile) {
     std::ifstream file(inputFile);
     if (!file) {
@@ -22,7 +23,7 @@ World::World(std::string inputFile) {
     file >> levels >> gridSize >> lives;
     file >> coinPct >> emptyPct >> goombaPct >> koopaPct >> mushroomPct;
     file.close();
-
+// https://www.tutorialspoint.com/cplusplus-program-to-read-file-word-by-word#:~:text=The%20task%20is%20very%20simple,each%20word%20one%20by%20one
     mario = new Mario(lives);
     gameLevels = new Level*[levels];
 
@@ -131,6 +132,7 @@ void World::moveMario(Level* level, int levelIdx, std::ofstream& logFile) {
     mario->col = newCol;
 
     // React to object on new tile
+    // https://www.geeksforgeeks.org/switch-statement-in-cpp/
     switch (obj) {
         case 'x': action = "Mario visited an empty space."; break;
         case 'c': mario->collectCoin(); action = "Mario collected a coin."; break;
@@ -150,6 +152,7 @@ void World::moveMario(Level* level, int levelIdx, std::ofstream& logFile) {
         case 'w': action = "Mario found a warp pipe."; break;
         default: action = "Mario encountered an unknown tile."; break;
     }
+    // https://www.geeksforgeeks.org/switch-statement-in-cpp/
 
     // Mark Mario's new position
     level->setPosition(mario->row, mario->col, 'H');
