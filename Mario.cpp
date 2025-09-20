@@ -1,11 +1,9 @@
 // Kihoon Yoo
 // 2486883
 // kiyoo@chapman.edu 
-// CPSC-350-04
+// CPSC-350-03
 // PA 2: Not So Super Mario Bros
 
-// This file defines the Mario class, representing the player character with logic for
-// collecting items, fighting enemies, and managing lives and power levels.
 
 #include "Mario.h"
 #include <cstdlib>
@@ -18,26 +16,23 @@ Mario::Mario(int initialLives) {
     enemiesDefeated = 0;
 }
 
-// Called when Mario collects a coin
-// Increases coin count and grants an extra life for every 20 coins
+// Handle coin collection and extra life at 20 coins
 void Mario::collectCoin() {
     coins++;
     if (coins == 20) {
-        lives++;     // Gain extra life
-        coins = 0;   // Reset coin count
+        lives++;     
+        coins = 0;   
     }
 }
 
-// Called when Mario eats a mushroom
-// Increases power level by 1, up to PL2
+// Increase power level if below PL2
 void Mario::eatMushroom() {
     if (powerLevel < PL2) {
         powerLevel = static_cast<PowerLevel>(powerLevel + 1);
     }
 }
 
-// Called when Mario fights a regular enemy (Goomba or Koopa)
-// Returns true if Mario wins, false if he loses
+// Fight Goomba or Koopa based on win chance
 bool Mario::fightEnemy(char enemyType) {
     int winChance = (enemyType == 'g') ? 80 : 65;  // Goomba: 80%, Koopa: 65%
     int roll = rand() % 100;
@@ -52,7 +47,6 @@ bool Mario::fightEnemy(char enemyType) {
         return true;  // Victory
     } else {
         enemiesDefeated = 0;  // Reset win streak
-        // Lose life or power depending on current power level
         if (powerLevel == PL0) {
             lives--;
         } else {
@@ -62,10 +56,11 @@ bool Mario::fightEnemy(char enemyType) {
     }
 }
 
-// Called when Mario fights a level boss
-// 50% win chance; if lost, power drops to PL0 and possibly lose a life
+// Fight boss with 50% chance; lose power/life if defeated
 bool Mario::fightBoss() {
+    // https://www.w3schools.com/cpp/cpp_howto_random_number.asp
     int roll = rand() % 100;
+    // https://www.w3schools.com/cpp/cpp_howto_random_number.asp
 
     if (roll < 50) {
         enemiesDefeated = 0;
@@ -82,5 +77,7 @@ bool Mario::fightBoss() {
         return false;  // Defeat
     }
 }
+
+
 
 
