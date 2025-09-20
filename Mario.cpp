@@ -4,7 +4,6 @@
 // CPSC-350-03
 // PA 2: Not So Super Mario Bros
 
-
 #include "Mario.h"
 #include <cstdlib>
 
@@ -77,6 +76,7 @@ bool Mario::fightBoss() {
         return false;  // Defeat
     }
 }
+
 
 
 
