@@ -4,7 +4,7 @@
 1. Full name: Kihoon Yoo
 2. Student ID: 2480883
 3. Chapman Email: kiyoo@chapman.edu
-4. Course number and section: CPSC-350-04
+4. Course number and section: CPSC-350-03
 5. Assignment or exercise number: PA2: Not So Super Mario Bros
 
 ## Project Description
@@ -31,8 +31,7 @@ Mario moves randomly across each level's NxN toroidal grid, interacting with ele
 7. World.cpp
 8. input.txt
 9. output.txt
-10. program
-11. README.md
+10. README.md
 
 ## Known Error 
 - There are no known errors in this program.
@@ -43,7 +42,7 @@ Mario moves randomly across each level's NxN toroidal grid, interacting with ele
 - https://www.tutorialspoint.com/cplusplus-program-to-read-file-word-by-word#:~:text=The%20task%20is%20very%20simple,each%20word%20one%20by%20one
 - https://www.geeksforgeeks.org/switch-statement-in-cpp/
 - Received debugging help from the Chapman TLC
-- Received additional debugging help from Dr.Stevens
+
 
 ## Instructions for compiling
 - To compile: g++ Main.cpp Level.cpp Mario.cpp World.cpp -o program
