@@ -1,10 +1,9 @@
 # Not_So_Super_Mario_Bros
 
 ## Project Description
-This project is a C++ simulation inspired by the classic Super Mario Bros. game, designed for Data Structures and Algorithms. The objective is to guide Mario through a world of multiple levels filled with coins, mushrooms, enemies (Goombas and Koopas), warp pipes, and level bosses.
+This project is a C++ simulation inspired by the classic Super Mario Bros. game, Originally developed for Chapman University's CPSC 350: Data Structures course. The objective is to guide Mario through a world of multiple levels filled with coins, mushrooms, enemies (Goombas and Koopas), warp pipes, and level bosses.
 Mario moves randomly across each level's NxN toroidal grid, interacting with elements based on defined rules. He gains coins, levels up with mushrooms, and battles enemies with probabilistic outcomes. The game ends when Mario either defeats the final boss or runs out of lives.
 
-Originally developed for Chapman University's CPSC 350: Data Structures course, this project demonstrates object-oriented design, game logic, and file I/O in C++.
 
 ## Key Features
 - Mario Simulation: Simulates Mario navigating the grid, interacting with the environment, battling enemies, collecting coins, eating mushrooms, and moving through levels.
