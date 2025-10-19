@@ -26,8 +26,6 @@ Mario moves randomly across each level's NxN toroidal grid, interacting with ele
 9. output.txt
 10. README.md
 
-## Known Error 
-- There are no known errors in this program.
 
 ## Instructions for compiling
 - To compile: g++ *.cpp -o mario
