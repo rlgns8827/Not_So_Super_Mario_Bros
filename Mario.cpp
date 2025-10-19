@@ -7,76 +7,93 @@
 #include "Mario.h"
 #include <cstdlib>
 
-// Constructor: Initializes Mario's lives, coins, power level, and enemy defeat counter
+// Constructor 
 Mario::Mario(int initialLives) {
     lives = initialLives;
     coins = 0;
-    powerLevel = PL0;
     enemiesDefeated = 0;
+    powerLevel = PL0;
+    row = 0;
+    col = 0;
 }
 
-// Handle coin collection and extra life at 20 coins
+// Collect Coin
 void Mario::collectCoin() {
     coins++;
-    if (coins == 20) {
-        lives++;     
-        coins = 0;   
+
+    // Every 20 coins gives Mario one extra life
+    if (coins % 20 == 0) {
+        lives++;
     }
 }
 
-// Increase power level if below PL2
+// Eat Mushroom 
 void Mario::eatMushroom() {
-    if (powerLevel < PL2) {
-        powerLevel = static_cast<PowerLevel>(powerLevel + 1);
-    }
+    // Power levels: PL0 -> PL1 -> PL2
+    if (powerLevel == PL0)
+        powerLevel = PL1;
+    else if (powerLevel == PL1)
+        powerLevel = PL2;
+    // If already PL2, no further change
 }
 
-// Fight Goomba or Koopa based on win chance
+// Fight Regular Enemy 
 bool Mario::fightEnemy(char enemyType) {
-    int winChance = (enemyType == 'g') ? 80 : 65;  // Goomba: 80%, Koopa: 65%
-    int roll = rand() % 100;
+    int winChance;
+
+    // Assign base win probabilities depending on enemy type
+    if (enemyType == 'g') {         // Goomba
+        winChance = 80;
+    } else if (enemyType == 'k') {  // Koopa
+        winChance = 65;
+    } else {                        // Unknown type — assume easy win
+        winChance = 100;
+    }
+
+    int roll = rand() % 100; // random value 0–99
 
     if (roll < winChance) {
         enemiesDefeated++;
-        // Gain extra life after 7 consecutive wins
-        if (enemiesDefeated == 7) {
+
+        // Every 7 enemies defeated gives Mario one extra life
+        if (enemiesDefeated % 7 == 0) {
             lives++;
-            enemiesDefeated = 0;
         }
-        return true;  // Victory
+        return true; // Mario wins the encounter
     } else {
-        enemiesDefeated = 0;  // Reset win streak
-        if (powerLevel == PL0) {
+        // Losing a fight costs a life or power level depending on state
+        if (powerLevel == PL2)
+            powerLevel = PL1;
+        else if (powerLevel == PL1)
+            powerLevel = PL0;
+        else
             lives--;
-        } else {
-            powerLevel = static_cast<PowerLevel>(powerLevel - 1);
-        }
-        return false;  // Defeat
+
+        return false; // Mario lost the encounter
     }
 }
 
-// Fight boss with 50% chance; lose power/life if defeated
+// Fight Level Boss 
 bool Mario::fightBoss() {
-    // https://www.w3schools.com/cpp/cpp_howto_random_number.asp
+    int winChance = 50;  // base chance to defeat boss
     int roll = rand() % 100;
-    // https://www.w3schools.com/cpp/cpp_howto_random_number.asp
 
-    if (roll < 50) {
-        enemiesDefeated = 0;
-        return true;  // Victory
+    if (roll < winChance) {
+        // Successful boss fight rewards an extra life
+        lives++;
+        return true;
     } else {
-        enemiesDefeated = 0;
-        // If power is low, lose a life and reset to PL0
-        if (powerLevel == PL0 || powerLevel == PL1) {
+        // Losing to boss reduces power level or life
+        if (powerLevel == PL2)
+            powerLevel = PL1;
+        else if (powerLevel == PL1)
+            powerLevel = PL0;
+        else
             lives--;
-            powerLevel = PL0;
-        } else {
-            powerLevel = PL0;
-        }
-        return false;  // Defeat
+
+        return false;
     }
 }
-
 
 
 
