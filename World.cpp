@@ -10,31 +10,31 @@
 #include <cstdlib>
 #include <ctime>
 
-// Constructor: Initializes the world based on input file parameters
-// https://www.tutorialspoint.com/cplusplus-program-to-read-file-word-by-word#:~:text=The%20task%20is%20very%20simple,each%20word%20one%20by%20one
+// Constructor 
 World::World(std::string inputFile) {
     std::ifstream file(inputFile);
     if (!file) {
-        std::cerr << "Error: Unable to open input file!" << std::endl;
-        exit(1);
+        std::cerr << "Error: Unable to open input file!\n";
+        exit(1); // terminate if input file cannot be opened
     }
 
+    // Read configuration parameters from the input file
     int gridSize, lives, coinPct, emptyPct, goombaPct, koopaPct, mushroomPct;
     file >> levels >> gridSize >> lives;
     file >> coinPct >> emptyPct >> goombaPct >> koopaPct >> mushroomPct;
     file.close();
-// https://www.tutorialspoint.com/cplusplus-program-to-read-file-word-by-word#:~:text=The%20task%20is%20very%20simple,each%20word%20one%20by%20one
-    mario = new Mario(lives);
-    gameLevels = new Level*[levels];
 
-    // Create and populate each level
+    mario = new Mario(lives);           // dynamically allocate Mario object
+    gameLevels = new Level*[levels];    // create dynamic array of Level pointers
+
+    // Populate each level using given percentages
     for (int i = 0; i < levels; i++) {
         gameLevels[i] = new Level(gridSize);
         gameLevels[i]->populateLevel(coinPct, emptyPct, goombaPct, koopaPct, mushroomPct, (i != levels - 1));
     }
 }
 
-// Destructor: Frees dynamically allocated memory
+// Destructor 
 World::~World() {
     delete mario;
     for (int i = 0; i < levels; i++) {
@@ -43,76 +43,81 @@ World::~World() {
     delete[] gameLevels;
 }
 
-// Simulates Mario playing a single level
+// Main Level Loop 
 void World::playLevel(int levelIdx, std::ofstream& logFile) {
     logFile << "==========\n";
 
     Level* currentLevel = gameLevels[levelIdx];
     int gridSize = currentLevel->getSize();
 
-    // Start Mario at a random position
+    // Random starting position for Mario in this level
     mario->row = rand() % gridSize;
     mario->col = rand() % gridSize;
 
     logFile << "Mario is starting in position: (" << mario->row << "," << mario->col << ")\n";
     logFile << "==========\n";
+
+    // Place Mario and print the initial layout
     currentLevel->setPosition(mario->row, mario->col, 'H');
     currentLevel->printLevel(logFile);
 
     int moveCount = 0;
-    const int MAX_MOVES = 500; // Prevent infinite looping
+    const int MAX_MOVES = 500; // limit per level to prevent infinite loops
 
+    // Continue while Mario is alive and hasn't exceeded move limit
     while (mario->lives > 0 && moveCount < MAX_MOVES) {
-        char current = currentLevel->getPosition(mario->row, mario->col);
+        char tile = currentLevel->getPosition(mario->row, mario->col);
 
-        // If Mario encounters a boss
-        if (current == 'b') {
+        // Boss encounter check
+        if (tile == 'b') {
             bool won = mario->fightBoss();
-            logFile << "Level: " << levelIdx << ". Mario is at position: (" << mario->row << "," << mario->col << "). Mario fought the level boss and " << (won ? "won." : "lost.")
-                    << " Mario has " << mario->lives << " lives left. Mario is at power level " << mario->powerLevel << ".\n";
+            logFile << "Level: " << levelIdx << ". Mario is at position: (" << mario->row << "," << mario->col
+                    << "). Mario fought the level boss and " << (won ? "won." : "lost.")
+                    << " Mario has " << mario->lives << " lives left. Mario is at power level "
+                    << mario->powerLevel << ".\n";
+            currentLevel->printLevel(logFile);
 
             if (won) {
-                currentLevel->setPosition(mario->row, mario->col, 'x');
-                currentLevel->printLevel(logFile);
-
+                currentLevel->setPosition(mario->row, mario->col, 'x'); // clear boss tile
                 if (levelIdx == levels - 1) {
                     logFile << "Mario Wins! The princess is saved!\n";
-                    return;
                 }
-                return; // Proceed to next level
+                return; // exit this level
             } else {
-                currentLevel->printLevel(logFile);
-                continue; // Retry boss
+                continue; // retry boss fight if Mario lost
             }
         }
 
-        // Move Mario and interact with environment
-        moveMario(currentLevel, levelIdx, logFile);
+        moveMario(currentLevel, levelIdx, logFile); // perform a move
         moveCount++;
 
-        // Check if Mario stepped on a warp pipe
+        // Check if Mario reached a warp pipe
         char postMove = currentLevel->getPosition(mario->row, mario->col);
         if (postMove == 'w') {
             currentLevel->setPosition(mario->row, mario->col, 'x');
-            logFile << "Level: " << levelIdx << ". Mario is at position: (" << mario->row << "," << mario->col << "). Mario warped to the next level!\n";
+            logFile << "Level: " << levelIdx << ". Mario is at position: (" << mario->row << "," << mario->col
+                    << "). Mario warped to the next level!\n";
             return;
         }
     }
 
-    // Max moves reached
+    // enforce 500-move cutoff cleanly to prevent infinite simulation
     if (moveCount >= MAX_MOVES) {
-        logFile << "Level: " << levelIdx << ". Mario exceeded the maximum number of moves (" << MAX_MOVES << ") and is considered stuck. Moving to next level or ending game.\n";
+        logFile << "Level: " << levelIdx << ". Mario exceeded " << MAX_MOVES
+                << " moves and is considered stuck.\n";
+        return;
     }
 
-    // Out of lives
+    // loss condition (Mario dies)
     if (mario->lives <= 0) {
         logFile << "WE LOST THE GAME! :(\n";
+        // "Mario Lost!" printed in main.cpp to avoid duplicates
     }
 }
 
-// Handles Mario's movement and logs interactions
+// Movement and Interaction
 void World::moveMario(Level* level, int levelIdx, std::ofstream& logFile) {
-    int direction = rand() % 4;
+    int direction = rand() % 4; // pick random direction (0–3)
     int size = level->getSize();
     int newRow = mario->row;
     int newCol = mario->col;
@@ -123,16 +128,20 @@ void World::moveMario(Level* level, int levelIdx, std::ofstream& logFile) {
     else if (direction == 2) { newCol = (mario->col - 1 + size) % size; dirStr = "LEFT"; }
     else { newCol = (mario->col + 1) % size; dirStr = "RIGHT"; }
 
-    char obj = level->getPosition(newRow, newCol);
-    std::string action;
+    // Announce Mario’s move BEFORE actually changing position
+    logFile << "Level: " << levelIdx << ". Mario is at position: (" << mario->row << "," << mario->col
+            << "). Mario is at power level " << mario->powerLevel
+            << ". Mario will move " << dirStr << ".\n";
 
-    // Clear Mario's old position
+    // Update Mario’s position (wrap-around movement)
     level->setPosition(mario->row, mario->col, 'x');
     mario->row = newRow;
     mario->col = newCol;
 
-    // React to object on new tile
-    // https://www.geeksforgeeks.org/switch-statement-in-cpp/
+    char obj = level->getPosition(mario->row, mario->col);
+    std::string action;
+
+    // Handle object interactions
     switch (obj) {
         case 'x': action = "Mario visited an empty space."; break;
         case 'c': mario->collectCoin(); action = "Mario collected a coin."; break;
@@ -140,28 +149,26 @@ void World::moveMario(Level* level, int levelIdx, std::ofstream& logFile) {
         case 'g': {
             bool won = mario->fightEnemy('g');
             action = won ? "Mario encountered a Goomba and won." : "Mario encountered a Goomba and lost.";
-            if (won) level->setPosition(mario->row, mario->col, 'x');
+            if (won) level->setPosition(mario->row, mario->col, 'x'); // clear defeated Goomba
             break;
         }
         case 'k': {
             bool won = mario->fightEnemy('k');
             action = won ? "Mario encountered a Koopa and won." : "Mario encountered a Koopa and lost.";
-            if (won) level->setPosition(mario->row, mario->col, 'x');
+            if (won) level->setPosition(mario->row, mario->col, 'x'); // clear defeated Koopa
             break;
         }
         case 'w': action = "Mario found a warp pipe."; break;
         default: action = "Mario encountered an unknown tile."; break;
     }
-    // https://www.geeksforgeeks.org/switch-statement-in-cpp/
 
-    // Mark Mario's new position
+    // Mark Mario’s new location and log outcome
     level->setPosition(mario->row, mario->col, 'H');
+    logFile << action << " Mario has " << mario->lives << " lives left. Mario has "
+            << mario->coins << " coins.\n";
 
-    // Log status
-    logFile << "Level: " << levelIdx << ". Mario is at position: (" << mario->row << "," << mario->col
-            << "). Mario is at power level " << mario->powerLevel << ". " << action << " Mario has " << mario->lives
-            << " lives left. Mario has " << mario->coins << " coins. Mario will move " << dirStr << ".\n";
-
+    // Print current level grid after each move
     level->printLevel(logFile);
 }
+
 
