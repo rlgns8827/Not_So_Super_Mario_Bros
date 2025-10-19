@@ -5,91 +5,88 @@
 // PA 2: Not So Super Mario Bros
 
 #include "Level.h"
-#include <iostream>
 #include <cstdlib>
-#include <cstring>
+#include <iostream>
 
-// Constructor: Initializes a size x size grid with all positions set to 'x' (empty)
-Level::Level(int n) {
-    size = n;
+// Constructor 
+Level::Level(int size) {
+    this->size = size;
     grid = new char*[size];
-    for (int i = 0; i < size; i++) {
+
+    // Allocate a square grid dynamically
+    for (int i = 0; i < size; ++i) {
         grid[i] = new char[size];
-        std::memset(grid[i], 'x', size * sizeof(char));  // Fill each row with 'x'
     }
 }
 
-// Destructor: Deallocates dynamically allocated memory for the grid
+// Destructor
 Level::~Level() {
-    for (int i = 0; i < size; i++) {
+    for (int i = 0; i < size; ++i) {
         delete[] grid[i];
     }
     delete[] grid;
 }
 
-// Fill level with objects based on percentages
-void Level::populateLevel(int coinPct, int emptyPct, int goombaPct, int koopaPct, int mushroomPct, bool hasWarp) {
-    int totalCells = size * size;
+// Populate the Level 
+void Level::populateLevel(int coinPct, int emptyPct, int goombaPct, int koopaPct, int mushroomPct, bool includeWarp) {
+    // Randomly fill the grid using given object percentages.
+    // The remaining percentage (after summing given values) automatically becomes empty spaces.
 
-    int numCoins = (totalCells * coinPct) / 100;
-    int numGoombas = (totalCells * goombaPct) / 100;
-    int numKoopas = (totalCells * koopaPct) / 100;
-    int numMushrooms = (totalCells * mushroomPct) / 100;
+    for (int i = 0; i < size; ++i) {
+        for (int j = 0; j < size; ++j) {
+            int roll = rand() % 100; // random number between 0–99
 
-    // Randomly place each object
-    for (int i = 0; i < numCoins; i++) placeObject('c');
-    for (int i = 0; i < numGoombas; i++) placeObject('g');
-    for (int i = 0; i < numKoopas; i++) placeObject('k');
-    for (int i = 0; i < numMushrooms; i++) placeObject('m');
-
-    // Place boss and optional warp pipe
-    placeObject('b');
-    if (hasWarp) placeObject('w');
-}
-
-// Randomly places an object at an empty grid position
-void Level::placeObject(char object) {
-    int r, c;
-    do {
-        r = rand() % size;
-        c = rand() % size;
-    } while (grid[r][c] != 'x');  // Keep finding until an empty space is found
-
-    grid[r][c] = object;
-}
-
-// Prints the current grid state to the output log file
-void Level::printLevel(std::ofstream& logFile) {
-    for (int i = 0; i < size; i++) {
-        for (int j = 0; j < size; j++) {
-            logFile << grid[i][j] << ' ';
+            if (roll < coinPct)
+                grid[i][j] = 'c'; // coin
+            else if (roll < coinPct + emptyPct)
+                grid[i][j] = 'x'; // empty
+            else if (roll < coinPct + emptyPct + goombaPct)
+                grid[i][j] = 'g'; // Goomba
+            else if (roll < coinPct + emptyPct + goombaPct + koopaPct)
+                grid[i][j] = 'k'; // Koopa
+            else if (roll < coinPct + emptyPct + goombaPct + koopaPct + mushroomPct)
+                grid[i][j] = 'm'; // Mushroom
+            else
+                grid[i][j] = 'x'; // Default filler
         }
-        logFile << '\n';
+    }
+
+    // Place the boss 'b' at a random location
+    int bossRow = rand() % size;
+    int bossCol = rand() % size;
+    grid[bossRow][bossCol] = 'b';
+
+    // Optionally include a warp pipe to the next level
+    if (includeWarp) {
+        int warpRow = rand() % size;
+        int warpCol = rand() % size;
+        grid[warpRow][warpCol] = 'w';
+    }
+}
+
+// Print Current Grid 
+void Level::printLevel(std::ofstream& logFile) {
+    for (int i = 0; i < size; ++i) {
+        for (int j = 0; j < size; ++j) {
+            logFile << grid[i][j] << " ";
+        }
+        logFile << "\n";
     }
     logFile << "==========\n";
 }
 
-// Gets the object at a given grid position
+// Get Object at Position
 char Level::getPosition(int row, int col) {
     return grid[row][col];
 }
 
-// Sets the object at a specific grid position
-void Level::setPosition(int row, int col, char object) {
-    grid[row][col] = object;
+// Set Object at Position 
+void Level::setPosition(int row, int col, char symbol) {
+    grid[row][col] = symbol;
 }
 
-// Returns the size of the level (N)
+// Get Grid Size 
 int Level::getSize() {
     return size;
 }
 
-// Checks if a boss ('b') still exists in the level
-bool Level::bossExists() const {
-    for (int i = 0; i < size; ++i) {
-        for (int j = 0; j < size; ++j) {
-            if (grid[i][j] == 'b') return true;
-        }
-    }
-    return false;
-}
