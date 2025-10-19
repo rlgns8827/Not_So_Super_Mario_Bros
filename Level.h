@@ -11,23 +11,22 @@
 
 class Level {
 private:
-    int size;       
-    char** grid;    
+    int size;      // dimensions of the level grid (size x size)
+    char** grid;   // 2D dynamic array representing the level
 
 public:
-    Level(int n);   // Constructor
-    ~Level();       // Destructor
+    // Constructor & Destructor
+    Level(int size);
+    ~Level();
 
+    // Populate level with random objects using percentage values
+    void populateLevel(int coinPct, int emptyPct, int goombaPct,
+                       int koopaPct, int mushroomPct, bool includeWarp);
 
-    void populateLevel(int coinPct, int emptyPct, int goombaPct, int koopaPct, int mushroomPct, bool hasWarp);
-    void placeObject(char object); // Place one object at random location
-
-    void printLevel(std::ofstream& logFile); // Output level state
-    char getPosition(int row, int col); // Get object at position
-    void setPosition(int row, int col, char object); // Set object at position
-    
-    int getSize();  // Return grid size
-    bool bossExists() const;  // Check if boss is still in grid
+    void printLevel(std::ofstream& logFile); // Print the current grid layout to the output file
+    char getPosition(int row, int col); // Get the character at a given grid position
+    void setPosition(int row, int col, char symbol); // Set the character at a given grid position
+    int getSize(); // Return the size of the level grid
 };
 
 #endif
