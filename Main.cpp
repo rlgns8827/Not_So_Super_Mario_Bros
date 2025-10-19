@@ -29,14 +29,20 @@ int main(int argc, char* argv[]) {
         return 1;
     }
 
-    srand(static_cast<unsigned>(time(0))); // Seed random number generator
+    srand(static_cast<unsigned>(time(0))); // Seed RNG
 
     World world(argv[1]);  // Build world from input file
 
+    // Print all levels before Mario starts
+    for (int i = 0; i < world.levels; ++i) {
+        logFile << "==========\nInitial layout for Level " << i << ":\n";
+        world.gameLevels[i]->printLevel(logFile);
+    }
+
     // Play each level while Mario has lives
     for (int i = 0; i < world.levels && world.mario->lives > 0; ++i) {
-        world.playLevel(i, logFile);     
-        if (world.mario->lives <= 0) break; 
+        world.playLevel(i, logFile);
+        if (world.mario->lives <= 0) break;
     }
 
     // Print game result to log file
@@ -46,8 +52,10 @@ int main(int argc, char* argv[]) {
         logFile << "Mario Lost!\n";
     }
 
-    logFile.close(); // Finalize output
+    logFile.close();
     return 0;
 }
+
+
 
 
